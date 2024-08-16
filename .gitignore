@@ -1,0 +1,7 @@
+venv/
+Datasets/movies_dataset.csv
+Datasets/credits.csv
+Datasets/movies.csv
+Datasets/crew_expanded.csv
+Datasets/casting_expanded.csv
+Datasets/col_id.csv
