@@ -1,0 +1,85 @@
+1. Análisis Financiero
+Retorno de Inversión (ROI): Calcula y analiza el retorno de inversión para las películas. Esto te permitirá identificar qué películas fueron más rentables en relación a su presupuesto.
+
+Ganancias Netas: Calcula la ganancia neta (diferencia entre ingresos y presupuesto) para identificar las películas más y menos rentables.
+
+Análisis de Presupuestos: Explora cómo el presupuesto de las películas afecta su éxito financiero o popularidad.
+
+Distribución de Ingresos: Analiza la distribución de ingresos a lo largo de los años, géneros, o países de producción.
+
+
+2. Análisis de Popularidad
+Tendencias de Popularidad: Observa cómo ha cambiado la popularidad de las películas a lo largo del tiempo. Puedes correlacionar esto con eventos o cambios en la industria.
+
+Comparación entre Géneros: Analiza la popularidad entre diferentes géneros de películas para ver cuáles han sido más exitosos en diferentes períodos.
+
+Factores de Éxito: Investiga qué factores (como género, presupuesto, director, actores) están más correlacionados con la popularidad de una película.
+
+
+3. Análisis Temporal
+Evolución del Cine: Estudia cómo ha evolucionado la producción cinematográfica a lo largo de las décadas en términos de número de películas, géneros, presupuestos, etc.
+
+Estacionalidad: Examina si hay patrones estacionales en el lanzamiento de películas y cómo esto afecta a su éxito.
+
+Tendencias de Géneros: Observa cómo la popularidad de ciertos géneros ha cambiado con el tiempo.
+
+
+4. Análisis por Género
+Géneros Más Rentables: Identifica qué géneros de películas suelen ser más rentables y analiza las razones detrás de esto.
+
+Popularidad por Género: Examina qué géneros de películas tienden a ser más populares entre el público.
+
+Presupuestos y Géneros: Analiza la relación entre los presupuestos de las películas y los géneros para ver si ciertos géneros suelen recibir más financiación.
+
+
+5. Análisis de Directores y Actores
+Impacto de los Directores: Investiga si algunos directores consistentemente producen películas de alto retorno, popularidad, o ganancia.
+
+Estrellas del Cine: Analiza si ciertos actores están asociados con películas más exitosas en términos de finanzas o popularidad.
+
+Colaboraciones Recurrentes: Explora si las colaboraciones recurrentes entre ciertos directores y actores tienden a ser más exitosas.
+
+
+6. Análisis Geográfico
+Producción por País: Examina qué países producen la mayoría de las películas y si hay una correlación entre la producción y el éxito financiero o popularidad.
+
+Éxito por Región: Analiza si las películas producidas en ciertos países tienden a ser más rentables o populares.
+
+Diversidad Cultural: Investiga la diversidad de países de producción y cómo influye en los tipos de películas y su recepción global.
+
+
+7. Análisis de Títulos
+Tendencias en Títulos: Explora patrones en los títulos de las películas, como la longitud de los títulos, palabras comunes, o tendencias en la elección de nombres.
+
+Nube de Palabras: Crea una nube de palabras para visualizar qué palabras son más frecuentes en los títulos de películas.
+
+
+8. Análisis de Correlaciones
+Correlación entre Variables: Calcula la correlación entre diferentes variables, como presupuesto, ingresos, popularidad, duración de la película, etc., para identificar relaciones interesantes.
+
+Factores de Éxito: Usa análisis de regresión para identificar qué variables son los mejores predictores del éxito financiero o popularidad de una película.
+
+
+9. Análisis de Distribución
+Distribución de Duración de Películas: Analiza la distribución de la duración de las películas y cómo afecta al éxito o popularidad.
+
+Distribución de Presupuestos: Examina cómo se distribuyen los presupuestos entre diferentes películas y géneros.
+
+
+10. Análisis de Premios y Nominaciones (si se tienen datos)
+Impacto de los Premios: Investiga si ganar o ser nominado a premios importantes tiene un impacto en los ingresos o popularidad de una película.
+
+Predicción de Premios: Utiliza técnicas de machine learning para predecir qué películas tienen más probabilidades de ganar premios basadas en características como director, elenco, género, etc.
+
+11. Visualización de Datos
+Gráficos de Barras: Visualiza los datos categóricos, como popularidad por género o retorno por director, usando gráficos de barras.
+
+Gráficos de Líneas: Muestra tendencias a lo largo del tiempo, como cambios en la popularidad o número de películas producidas.
+
+Diagramas de Cajas (Boxplots): Útiles para visualizar la distribución de una variable y detectar outliers (por ejemplo, ingresos por género).
+
+
+12. Análisis Comparativo
+Comparación de Estudios de Producción: Compara el éxito financiero y la popularidad de diferentes estudios de producción.
+
+Comparación de Periodos Históricos: Compara las películas producidas en diferentes décadas para ver cómo han cambiado las tendencias en la industria cinematográfica.
