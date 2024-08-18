@@ -2,16 +2,24 @@ from fastapi import FastAPI, Query
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics.pairwise import cosine_similarity
-from scipy.sparse import hstack, csr_matrix
-from sklearn.preprocessing import StandardScaler
+from scipy.sparse import hstack
 
 
 # Datos
 movies = pd.read_parquet('./Datasets/movies.parquet')
 casting = pd.read_parquet('./Datasets/union_mcasting.parquet')
 crew = pd.read_parquet('./Datasets/union_mcrew.parquet')
+
+# Cargar solo las columnas necesarias
+use_columns = ['title', 'genre_name']
+movies_df = pd.read_parquet('./Datasets/movies.parquet', columns=use_columns)
+
+# Agrupar los géneros por título para evitar duplicados
+movies_df_grouped = movies_df.groupby('title').agg({
+    'genre_name': lambda x: list(set(x))  # Crear una lista única de géneros
+}).reset_index()
 
 # Asegurarse de que release_date esté en formato de fecha
 movies['release_date'] = pd.to_datetime(movies['release_date'], errors='coerce')
@@ -263,7 +271,7 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
 
 @app.get("/recommendation system", tags=["sistema de recomendacion"])
 
-def recomendacion(titulo: str = Query(default= 'Hotel Transylvania')):
+def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=True, genre_weight=3):
     
     """
     <strong>Esta funcion devuelve las peliculas recomendadas a traves del titulo de la pelicula<strong>
@@ -277,59 +285,54 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania')):
             Las películas recomendadas.
     """
 
-    # Cargar datos dentro de la función
-    movies_df = pd.read_parquet('../Datasets/movies.parquet')
-
-    # Asegúrate de que la columna de título esté en minúsculas para la búsqueda
     titulo = titulo.lower()
     
-    # Filtra el DataFrame para la película de entrada
-    pelicula = movies_df[movies_df['title'].str.lower() == titulo]
+    pelicula = movies_df_grouped[movies_df_grouped['title'].str.lower() == titulo]
     
     if pelicula.empty:
         return "Película no encontrada."
     
-    # Preparar datos para vectorización
-    # Crear el vectorizador para el título
+    # Vectorizar los títulos
     title_vectorizer = TfidfVectorizer(stop_words='english')
-    # Crear el codificador para el género
-    genre_encoder = OneHotEncoder(sparse_output=True, handle_unknown='ignore')
+    title_vectors = title_vectorizer.fit_transform(movies_df_grouped['title'])
     
-    # Encajamos el codificador y el vectorizador
-    title_vectorizer.fit(movies_df['title'])
-    genre_encoder.fit(movies_df['genre_name'].apply(lambda x: x.split('|')).tolist())
+    # Codificar los géneros
+    genre_encoder = MultiLabelBinarizer()
+    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
     
-    # Transformamos los datos
-    title_vectors = title_vectorizer.transform(movies_df['title'])
-    genre_vectors = genre_encoder.transform(movies_df['genre_name'].apply(lambda x: x.split('|')).tolist())
-    popularity = movies_df['popularity'].values.reshape(-1, 1)
+    # Ponderar más los géneros
+    genre_vectors = genre_vectors * genre_weight
     
-    # Normalizamos la popularidad
-    scaler = StandardScaler()
-    popularity = scaler.fit_transform(popularity)
+    # Combinar vectores de título y género
+    combined_vectors = hstack([title_vectors, genre_vectors]).tocsr()
     
-    # Convertimos popularidad a una matriz dispersa
-    popularity = csr_matrix(popularity)
+    # Obtener el índice de la película de entrada
+    idx = movies_df_grouped.index[movies_df_grouped['title'].str.lower() == titulo].tolist()[0]
     
-    # Concatenamos todos los vectores
-    combined_vectors = hstack([title_vectors, genre_vectors, popularity])
+    # Calcular la similitud de coseno
+    input_vector = combined_vectors[idx]
+    cosine_sim = cosine_similarity(input_vector, combined_vectors).flatten()
     
-    # Encuentra el índice de la película de entrada
-    idx = movies_df.index[movies_df['title'].str.lower() == titulo].tolist()[0]
+    # Excluir la película de entrada y ordenar por similitud
+    sim_scores = sorted(list(enumerate(cosine_sim)), key=lambda x: x[1], reverse=True)
+    sim_scores = [score for score in sim_scores if score[0] != idx]
     
-    # Calcula la similitud de coseno
-    cosine_sim = cosine_similarity(combined_vectors[idx:idx+1], combined_vectors).flatten()
+    # Seleccionar las películas recomendadas (máximo 5)
+    recommended_titles = set()
+    top_similar = [score for score in sim_scores if score[1] > 0.7]  # Filtrar las más similares
     
-    # Crea una lista de similitud excluyendo la película de entrada
-    sim_scores = list(enumerate(cosine_sim))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    if len(top_similar) >= 5:
+        selected_similar = np.random.choice([score[0] for score in top_similar], 5, replace=False)
+    else:
+        selected_similar = [score[0] for score in top_similar[:5]]
     
-    # Obtén las 5 películas más similares
-    sim_scores = sim_scores[1:6]
-    movie_indices = [i[0] for i in sim_scores]
+    for movie_index in selected_similar:
+        movie_title = movies_df_grouped['title'].iloc[movie_index]
+        recommended_titles.add(movie_title)
     
-    # Devuelve los nombres de las películas recomendadas
-    recommended_movies = movies_df['title'].iloc[movie_indices].tolist()
+    final_recommendations = list(recommended_titles)
     
+    if len(final_recommendations) == 0:
+        return "No hay suficientes recomendaciones disponibles."
 
-    return (f'Peliculas sugeridas {recommended_movies}')
+    return (f'Peliculas sugeridas {final_recommendations}')
