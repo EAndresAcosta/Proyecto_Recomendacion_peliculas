@@ -306,18 +306,24 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
     genre_encoder = MultiLabelBinarizer()
     genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
     
-
-    # Verificar y asegurar que genre_vectors es numérico
-    if genre_vectors.dtype != 'float64':
-        genre_vectors = genre_vectors.astype(float)
+    # Asegurarse de que genre_vectors es numérico
+    print("Antes de la conversión:", genre_vectors.dtype)
+    genre_vectors = genre_vectors.astype(float)
+    print("Después de la conversión:", genre_vectors.dtype)
+    
+    # Asegurarse de que genre_weight es numérico
+    if not isinstance(genre_weight, (int, float)):
+        raise ValueError("genre_weight debe ser un número (int o float)")
+    
+    print("genre_weight tipo:", type(genre_weight))
     
     # Ponderar más los géneros
+    try:
+        genre_vectors *= genre_weight
+    except Exception as e:
+        print("Error al multiplicar genre_vectors con genre_weight:", e)
+        return "Error en el procesamiento de los datos."
 
-    # Verifica los tipos de datos y realiza la multiplicación correctamente
-    genre_vectors = genre_vectors.astype(float)  # Asegúrate de que sea float
-
-    genre_vectors *= genre_weight  # Multiplicación correcta para arrays numéricos
-    
     # Combinar vectores de título y género
     combined_vectors = hstack([title_vectors, genre_vectors]).tocsr()
     
