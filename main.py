@@ -298,7 +298,7 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
     
     # Codificar los géneros
     genre_encoder = MultiLabelBinarizer()
-    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
+    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name']).astype(float)
     
     # Ponderar más los géneros
     genre_vectors = genre_vectors * genre_weight
@@ -335,4 +335,4 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
     if len(final_recommendations) == 0:
         return "No hay suficientes recomendaciones disponibles."
 
-    return (f'Peliculas sugeridas {final_recommendations}')
+    return (f'Películas sugeridas: {final_recommendations}')
