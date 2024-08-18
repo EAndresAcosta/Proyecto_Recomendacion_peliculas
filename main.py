@@ -53,11 +53,14 @@ app = FastAPI(
 def cantidad_filmaciones_mes(mes: str = Query(default= 'enero')):
     """
     <strong>Esta función devuelve la cantidad de películas que se estrenaron en un mes específico.<strong>
-    Argumentos:
-        mes (str): El nombre del mes en español.
 
-    Returns:
-        str: La cantidad de películas que se estrenaron en el mes especificado.
+    Argumentos:
+
+            El nombre del mes en español.
+
+        Retorna:
+
+            La cantidad de películas que se estrenaron en el mes especificado.
     """
     # Crear un diccionario para mapear nombres de meses en español con números
     meses = {
@@ -81,14 +84,17 @@ def cantidad_filmaciones_mes(mes: str = Query(default= 'enero')):
 
 @app.get("/title, year of release, score", tags=["películas por dia"])
 
-def cantidad_filmaciones_dia(dia):
+def cantidad_filmaciones_dia(dia: str = Query(default= 'lunes')):
     """
     <strong>Esta función devuelve la cantidad de películas que se estrenaron en un día específico.<strong>
-    Argumentos:
-        dia (str): El nombre del día de la semana en español.
 
-        Returns:
-        str: La cantidad de películas que se estrenaron en el día especificado.
+    Argumentos:
+
+            El nombre del día de la semana en español.
+
+        Retorna:
+
+            La cantidad de películas que se estrenaron en el día especificado.
     """
     # Crear un diccionario para mapear nombres de días en español con números
     dias_semana = {
@@ -111,15 +117,18 @@ def cantidad_filmaciones_dia(dia):
 
 @app.get("/movies per day", tags=["Título, año de lanzamiento, puntaje"])
 
-def score_titulo(titulo_de_la_filmacion):
+def score_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
     """
     <strong>Esta función devuelve el título, año de lanzamiento y score de una película específica.<strong>
-    Argumentos:
-        titulo_de_la_filmacion (str): El título de la película.
 
-        Returns:
-        str: El título, año de lanzamiento y score de la película especificada.
+    Argumentos:
+
+            El título de la película.
+
+        Retorna:
+
+            El título, año de lanzamiento y score de la película especificada.
     """
     # Filtrar el DataFrame por el título de la filmación
     pelicula = movies[movies['title'].str.lower() == titulo_de_la_filmacion.lower()]
@@ -138,15 +147,18 @@ def score_titulo(titulo_de_la_filmacion):
 
 @app.get("/ratings, average", tags=["Votos, promedio"])
 
-def votos_titulo(titulo_de_la_filmacion):
+def votos_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
     """
     <strong>Esta función devuelve la cantidad de votos y el promedio de las votaciones de una película específica.<strong>
-    Argumentos:
-        titulo_de_la_filmacion (str): El título de la película.
 
-        Returns:
-        str: La cantidad de votos y el promedio de las votaciones de la película especificada.
+    Argumentos:
+
+            El título de la película.
+
+        Retorna:
+
+            La cantidad de votos y el promedio de las votaciones de la película especificada.
     """
     # Filtrar el DataFrame por el título de la filmación
     pelicula = movies[movies['title'].str.lower() == titulo_de_la_filmacion.lower()]
@@ -171,15 +183,18 @@ def votos_titulo(titulo_de_la_filmacion):
 
 @app.get("/actors", tags=["Actores"])
 
-def get_actor(nombre_actor):
+def get_actor(nombre_actor: str = Query(default= 'Tom Hanks')):
 
     """
     <strong>Esta funcion devuelve el exito del actor a traves del retorno, promedio y participacion en cantidad de filmaciones.<strong>
+    
     Argumentos:
-        nombre_actor (str): El nombre del actor.
 
-        Returns:
-        str: El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
+            El nombre del actor.
+
+        Retorna:
+
+            El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
     """
     # Filtrar el DataFrame por el nombre del actor en la columna 'name'
     peliculas_actor = casting[casting['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
@@ -199,7 +214,20 @@ def get_actor(nombre_actor):
 
 @app.get("/director", tags=["Director"])
 
-def get_director(nombre_director):
+def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
+
+    """
+    <strong>Esta función devuelve el retorno total del director y las películas que ha dirigido.<strong>
+
+    Argumentos:
+
+            El nombre del director.
+
+        Retorna:
+
+            El retorno total del director y las películas que ha dirigido.
+    """
+
     # Filtrar el DataFrame por el nombre del director en la columna 'name'
     peliculas_director = crew[crew['name'].str.lower() == nombre_director.lower()]
     
@@ -249,15 +277,18 @@ def get_director(nombre_director):
 
 @app.get("/recommendation system", tags=["sistema de recomendacion"])
 
-def recomendacion(titulo, randomize=True, genre_weight=3):
+def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=True, genre_weight=3):
     
     """
     <strong>Esta funcion devuelve las peliculas recomendadas a traves del titulo de la pelicula<strong>
-    Argumentos:
-        titulo (str): El nombre de la película.
 
-        Returns:
-        str: Las películas recomendadas.
+    Argumentos:
+
+            El nombre de la película.
+
+        Retorna:
+
+            Las películas recomendadas.
     """
 
     titulo = titulo.lower()
@@ -275,8 +306,12 @@ def recomendacion(titulo, randomize=True, genre_weight=3):
     genre_encoder = MultiLabelBinarizer()
     genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
     
+    # Verificar y asegurar que genre_vectors es numérico
+    if genre_vectors.dtype != 'float64':
+        genre_vectors = genre_vectors.astype(float)
+    
     # Ponderar más los géneros
-    genre_vectors = genre_vectors * genre_weight
+    genre_vectors *= genre_weight  # Multiplicación correcta para arrays numéricos
     
     # Combinar vectores de título y género
     combined_vectors = hstack([title_vectors, genre_vectors]).tocsr()
