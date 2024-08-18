@@ -25,21 +25,6 @@ movies['popularity'] = pd.to_numeric(movies['popularity'], errors='coerce')
 if casting['name'].isnull().any():
     casting['name'] = casting['name'].fillna('')  # Rellenar valores nulos con cadena vacía
 
-# Agrupar los géneros por título para evitar duplicados
-movies_df_grouped = movies.groupby('title').agg({
-    'genre_name': lambda x: list(set(x)),  # Crear una lista única de géneros
-    'popularity': 'first',
-    'release_date': 'first',
-    'budget': 'first',
-    'revenue': 'first',
-    'runtime': 'first',
-    'vote_average': 'first',
-    'vote_count': 'first',
-    'release_year': 'first',
-    'id_movie': 'first'
-}).reset_index()
-
-
 
 app = FastAPI(
     title="Proyecto Recomendacion Peliculas",
@@ -278,7 +263,7 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
 
 @app.get("/recommendation system", tags=["sistema de recomendacion"])
 
-def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=True, genre_weight=3):
+def recomendacion(titulo: str = Query(default= 'Hotel Transylvania')):
     
     """
     <strong>Esta funcion devuelve las peliculas recomendadas a traves del titulo de la pelicula<strong>
@@ -344,7 +329,7 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
     movie_indices = [i[0] for i in sim_scores]
     
     # Devuelve los nombres de las películas recomendadas
-    recommended_movies = movies_df['title'].iloc[movie_indices].tolist())
+    recommended_movies = movies_df['title'].iloc[movie_indices].tolist()
     
 
     return (f'Peliculas sugeridas {recommended_movies}')
