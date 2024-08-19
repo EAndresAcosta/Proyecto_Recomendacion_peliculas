@@ -8,18 +8,10 @@ from scipy.sparse import hstack
 
 
 # Datos
-movies = pd.read_parquet('./Datasets/movies.parquet')
-casting = pd.read_parquet('./Datasets/union_mcasting.parquet')
-crew = pd.read_parquet('./Datasets/union_mcrew.parquet')
+movies = pd.read_parquet('./Datasets/movies_compressed.parquet')
+casting = pd.read_parquet('./Datasets/endpoint_casting.parquet')
+crew = pd.read_parquet('./Datasets/endpoint_crew.parquet')
 
-# Cargar solo las columnas necesarias
-use_columns = ['title', 'genre_name']
-movies_df = pd.read_parquet('./Datasets/movies.parquet', columns=use_columns)
-
-# Agrupar los géneros por título para evitar duplicados
-movies_df_grouped = movies_df.groupby('title').agg({
-    'genre_name': lambda x: list(set(x))  # Crear una lista única de géneros
-}).reset_index()
 
 # Asegurarse de que release_date esté en formato de fecha
 movies['release_date'] = pd.to_datetime(movies['release_date'], errors='coerce')
@@ -191,14 +183,17 @@ def get_actor(nombre_actor: str = Query(default= 'Tom Hanks')):
             El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
     """
     # Filtrar el DataFrame por el nombre del actor en la columna 'name'
-    peliculas_actor = casting[casting['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
+    peliculas_actor = movies[movies['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
     
     if peliculas_actor.empty:
         return f"No se encontró ninguna película con el actor '{nombre_actor}'."
     
+    # Eliminar duplicados basados en el 'id' de la película
+    peliculas_actor_unicas = peliculas_actor.drop_duplicates(subset='id')
+    
     # Calcular el éxito del actor medido a través del retorno
-    total_retorno = peliculas_actor['return'].sum()
-    cantidad_peliculas = peliculas_actor.shape[0]
+    total_retorno = peliculas_actor_unicas['return'].sum()
+    cantidad_peliculas = peliculas_actor_unicas.shape[0]
     promedio_retorno = total_retorno / cantidad_peliculas if cantidad_peliculas > 0 else 0
     
     return (f"El actor {nombre_actor} ha participado en {cantidad_peliculas} filmaciones, "
@@ -257,15 +252,14 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
             'ganancia': ganancia
         })
     
-    # Crear la respuesta con los detalles de cada película
-    detalles_peliculas_str = ""
-    for detalle in detalles_peliculas:
-        detalles_peliculas_str += (f"\nPelícula: {detalle['titulo']} - Fecha de lanzamiento: {detalle['fecha_lanzamiento']} - "
-                                f"Retorno: {detalle['retorno']:.2f} - Costo: {detalle['presupuesto']} - Ganancia: {detalle['ganancia']}")
+    # Crear el diccionario de respuesta
+    resultado = {
+        'director': nombre_director,
+        'total_return': total_retorno,
+        'movies': detalles_peliculas
+    }
     
-    # Retornar el resumen del director
-    return (f"El director {nombre_director} ha conseguido un retorno total de {total_retorno:.2f}. "
-            f"Detalles de las películas dirigidas:{detalles_peliculas_str}")
+    return resultado
 
 #----------------------------------------------------------------------------------------------------------
 
@@ -284,6 +278,13 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
 
             Las películas recomendadas.
     """
+    # Leer el archivo parquet
+    movies_df = pd.read_parquet('../Datasets/movies_df.parquet')
+
+    # Agrupar los géneros por título para evitar duplicados
+    movies_df_grouped = movies_df.groupby('title').agg({
+    'genre_name': lambda x: list(set(x))  # Crear una lista única de géneros
+    }).reset_index()
 
     titulo = titulo.lower()
     
