@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 import pandas as pd
 import numpy as np
+import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -24,7 +25,7 @@ app = FastAPI(
     }]
 )
 
-@app.get("/movies per month", tags=["películas por mes"])
+@app.get("/movies per month", tags=["Películas por mes"])
 
 def cantidad_filmaciones_mes(mes: str = Query(default= 'enero')):
     """
@@ -61,7 +62,7 @@ def cantidad_filmaciones_mes(mes: str = Query(default= 'enero')):
 
 #----------------------------------------------------------------------------------------------------------
 
-@app.get("/title, year of release, score", tags=["películas por dia"])
+@app.get("/title, year of release, score", tags=["Películas por dia"])
 
 def cantidad_filmaciones_dia(dia: str = Query(default= 'lunes')):
     """
@@ -96,7 +97,7 @@ def cantidad_filmaciones_dia(dia: str = Query(default= 'lunes')):
 
 #----------------------------------------------------------------------------------------------------------
 
-@app.get("/movies per day", tags=["Título, año de lanzamiento, puntaje"])
+@app.get("/movies per day", tags=["Título, Año de lanzamiento, Puntaje"])
 
 def score_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
@@ -126,7 +127,7 @@ def score_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
 #----------------------------------------------------------------------------------------------------------
 
-@app.get("/ratings, average", tags=["Votos, promedio"])
+@app.get("/ratings, average", tags=["Votos, Promedio"])
 
 def votos_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
@@ -273,9 +274,9 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
 
 #----------------------------------------------------------------------------------------------------------
 
-@app.get("/recommendation system", tags=["sistema de recomendacion"])
+@app.get("/recommendation system", tags=["Sistema de recomendacion"])
 
-def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=True, genre_weight=3):
+def recomendacion(titulo: str = Query(default= 'Toy Story'), randomize=True):
     
     """
     <strong>Esta funcion devuelve las peliculas recomendadas a traves del titulo de la pelicula<strong>
@@ -288,65 +289,86 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
 
             Las películas recomendadas.
     """
-    # Leer el archivo parquet
-    movies_df = pd.read_parquet('./Datasets/movies_df.parquet')
+    try:
+        # Cargar datos
+        movies_df = pd.read_parquet('./Datasets/movies_df.parquet')
 
-    # Agrupar los géneros por título para evitar duplicados
-    movies_df_grouped = movies_df.groupby('title').agg({
-    'genre_name': lambda x: list(set(x))
-    }).reset_index()
+        # Agrupar los géneros por título
+        movies_df_grouped = movies_df.groupby('title').agg({
+            'genre_name': lambda x: list(set(x))
+        }).reset_index()
 
-    titulo = titulo.lower()
-    
-    pelicula = movies_df_grouped[movies_df_grouped['title'].str.lower() == titulo]
-    
-    if pelicula.empty:
-        return "Película no encontrada."
-    
-    # Vectorizar los títulos
-    title_vectorizer = TfidfVectorizer(stop_words='english')
-    title_vectors = title_vectorizer.fit_transform(movies_df_grouped['title'])
-    
-    # Codificar los géneros
-    genre_encoder = MultiLabelBinarizer()
-    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
+        titulo_lower = titulo.lower()
+        
+        # Verificar si la película existe
+        pelicula = movies_df_grouped[movies_df_grouped['title'].str.lower() == titulo_lower]
+        if pelicula.empty:
+            return "Película no encontrada."
+        
+        # Vectorizar los títulos
+        title_vectorizer = TfidfVectorizer(stop_words='english')
+        title_vectors = title_vectorizer.fit_transform(movies_df_grouped['title'])
+        
+        # Codificar los géneros
+        genre_encoder = MultiLabelBinarizer()
+        genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
+        
+        # Combinar vectores de título y género en una sola matriz
+        combined_vectors = hstack([title_vectors, genre_vectors]).tocsr()
+        
+        # Obtener el índice de la película de entrada
+        idx = movies_df_grouped.index[movies_df_grouped['title'].str.lower() == titulo_lower].tolist()[0]
+        
+        # Calcular la similitud de coseno
+        input_vector = combined_vectors[idx]
+        cosine_sim = cosine_similarity(input_vector, combined_vectors).flatten()
+        
+        # Excluir la película de entrada y ordenar por similitud
+        sim_scores = sorted(list(enumerate(cosine_sim)), key=lambda x: x[1], reverse=True)
+        sim_scores = [score for score in sim_scores if score[0] != idx]
+        
+        # Obtener los géneros de la película de entrada
+        input_genres = set(movies_df_grouped['genre_name'].iloc[idx])
+        
+        # Filtrar por películas que coincidan en al menos 2 géneros
+        filtered_movies = []
+        for movie_index, sim_score in sim_scores:
+            movie_genres = set(movies_df_grouped['genre_name'].iloc[movie_index])
+            common_genres = input_genres.intersection(movie_genres)
+            if len(common_genres) >= 2:
+                filtered_movies.append(movie_index)
+        
+        # Obtener todas las secuelas
+        sequel_titles = movies_df_grouped[movies_df_grouped['title'].str.contains(fr'{re.escape(titulo)} \d+', case=False, regex=True)]['title'].tolist()
+        
+        # Inicializar las listas de recomendaciones
+        recommendations = []
+        
+        # Agregar secuelas primero
+        if sequel_titles:
+            recommendations.extend(sequel_titles)
+        
+        # Si hay espacio, agregar otras películas similares
+        if len(recommendations) < 5:
+            additional_movies = [movies_df_grouped['title'].iloc[movie_index] for movie_index in filtered_movies if movies_df_grouped['title'].iloc[movie_index] not in recommendations]
+            if randomize:
+                additional_movies = np.random.choice(additional_movies, min(5 - len(recommendations), len(additional_movies)), replace=False)
+            else:
+                additional_movies = additional_movies[:5 - len(recommendations)]
+            
+            recommendations.extend(additional_movies)
+        
+        # Garantizar que se devuelvan exactamente 5 recomendaciones
+        if len(recommendations) > 5:
+            recommendations = recommendations[:5]
+        
+        if len(recommendations) == 0:
+            return "No hay suficientes recomendaciones disponibles."
 
-    # Asegurarse de que los vectores son del tipo float
-    genre_vectors = genre_vectors.astype(float)
-    
-    # Ponderar más los géneros
-    genre_vectors = genre_vectors * genre_weight
-    
-    # Combinar vectores de título y género
-    combined_vectors = hstack([title_vectors, genre_vectors]).tocsr()
-    
-    # Obtener el índice de la película de entrada
-    idx = movies_df_grouped.index[movies_df_grouped['title'].str.lower() == titulo].tolist()[0]
-    
-    # Calcular la similitud de coseno
-    input_vector = combined_vectors[idx]
-    cosine_sim = cosine_similarity(input_vector, combined_vectors).flatten()
-    
-    # Excluir la película de entrada y ordenar por similitud
-    sim_scores = sorted(list(enumerate(cosine_sim)), key=lambda x: x[1], reverse=True)
-    sim_scores = [score for score in sim_scores if score[0] != idx]
-    
-    # Seleccionar las películas recomendadas (máximo 5)
-    recommended_titles = set()
-    top_similar = [score for score in sim_scores if score[1] > 0.7]  # Filtrar las más similares
-    
-    if len(top_similar) >= 5:
-        selected_similar = np.random.choice([score[0] for score in top_similar], 5, replace=False)
-    else:
-        selected_similar = [score[0] for score in top_similar[:5]]
-    
-    for movie_index in selected_similar:
-        movie_title = movies_df_grouped['title'].iloc[movie_index]
-        recommended_titles.add(movie_title)
-    
-    final_recommendations = list(recommended_titles)
-    
-    if len(final_recommendations) == 0:
-        return "No hay suficientes recomendaciones disponibles."
+        # Convertir los elementos de la lista a strings si son np.str_
+        recommendations = [str(item) for item in recommendations]
 
-    return (f'Películas sugeridas: {final_recommendations}')
+        return f'Películas recomendadas: {recommendations}'
+
+    except Exception as e:
+        return {"error": str(e)}
