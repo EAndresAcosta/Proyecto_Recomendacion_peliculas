@@ -279,7 +279,7 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
             Las películas recomendadas.
     """
     # Leer el archivo parquet
-    movies_df = pd.read_parquet('../Datasets/movies_df.parquet')
+    movies_df = pd.read_parquet('./Datasets/movies_df.parquet')
 
     # Agrupar los géneros por título para evitar duplicados
     movies_df_grouped = movies_df.groupby('title').agg({
