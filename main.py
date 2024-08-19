@@ -9,22 +9,12 @@ from scipy.sparse import hstack
 
 # Datos
 movies = pd.read_parquet('./Datasets/movies_compressed.parquet')
-casting = pd.read_parquet('./Datasets/endpoint_casting.parquet')
-crew = pd.read_parquet('./Datasets/endpoint_crew.parquet')
-
 
 # Asegurarse de que release_date esté en formato de fecha
 movies['release_date'] = pd.to_datetime(movies['release_date'], errors='coerce')
-casting['release_date'] = pd.to_datetime(casting['release_date'], errors='coerce')
-crew['release_date'] = pd.to_datetime(crew['release_date'], errors='coerce')
 
 # Asegurarse de que popularity esté en formato numérico
 movies['popularity'] = pd.to_numeric(movies['popularity'], errors='coerce')
-
-# Asegurarse de que 'name' no tenga valores nulos
-if casting['name'].isnull().any():
-    casting['name'] = casting['name'].fillna('')  # Rellenar valores nulos con cadena vacía
-
 
 app = FastAPI(
     title="Proyecto Recomendacion Peliculas",
@@ -182,6 +172,16 @@ def get_actor(nombre_actor: str = Query(default= 'Tom Hanks')):
 
             El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
     """
+    # Datos
+    casting = pd.read_parquet('./Datasets/endpoint_casting.parquet')
+
+    # Asegurarse de que release_date esté en formato de fecha
+    casting['release_date'] = pd.to_datetime(casting['release_date'], errors='coerce')
+
+    # Asegurarse de que 'name' no tenga valores nulos
+    if casting['name'].isnull().any():
+        casting['name'] = casting['name'].fillna('')  # Rellenar valores nulos con cadena vacía
+
     # Filtrar el DataFrame por el nombre del actor en la columna 'name'
     peliculas_actor = casting[casting['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
     
@@ -216,6 +216,11 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
 
             El retorno total del director y las películas que ha dirigido.
     """
+    # Datos
+    crew = pd.read_parquet('./Datasets/endpoint_crew.parquet')
+    
+    # Asegurarse de que release_date esté en formato de fecha
+    crew['release_date'] = pd.to_datetime(crew['release_date'], errors='coerce')
 
     # Filtrar el DataFrame por el nombre del director en la columna 'name'
     peliculas_director = crew[crew['name'].str.lower() == nombre_director.lower()]
@@ -283,7 +288,7 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
 
     # Agrupar los géneros por título para evitar duplicados
     movies_df_grouped = movies_df.groupby('title').agg({
-    'genre_name': lambda x: list(set(x))  # Crear una lista única de géneros
+    'genre_name': lambda x: list(set(x))
     }).reset_index()
 
     titulo = titulo.lower()
