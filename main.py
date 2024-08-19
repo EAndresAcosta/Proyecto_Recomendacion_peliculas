@@ -51,8 +51,11 @@ def cantidad_filmaciones_mes(mes: str = Query(default= 'enero')):
     if not mes_numero:
         return "Mes ingresado no es válido."
     
+    # Eliminar duplicados basado en el título
+    movies_sin_duplicados = movies.drop_duplicates(subset='title')
+    
     # Filtrar el dataframe por el mes
-    cantidad = movies[movies['release_date'].dt.month == mes_numero].shape[0]
+    cantidad = movies_sin_duplicados[movies_sin_duplicados['release_date'].dt.month == mes_numero].shape[0]
     
     return f"{cantidad} cantidad de películas fueron estrenadas en el mes de {mes.capitalize()}."
 
@@ -84,8 +87,10 @@ def cantidad_filmaciones_dia(dia: str = Query(default= 'lunes')):
     if dia_numero is None:
         return "Día ingresado no es válido."
     
+    movies_sin_duplicados = movies.drop_duplicates(subset='title')
+    
     # Filtrar el dataframe por el día de la semana
-    cantidad = movies[movies['release_date'].dt.dayofweek == dia_numero].shape[0]
+    cantidad = movies_sin_duplicados[movies_sin_duplicados['release_date'].dt.dayofweek == dia_numero].shape[0]
     
     return f"{cantidad} cantidad de películas fueron estrenadas en los días {dia.capitalize()}."
 
@@ -304,7 +309,10 @@ def recomendacion(titulo: str = Query(default= 'Hotel Transylvania'), randomize=
     
     # Codificar los géneros
     genre_encoder = MultiLabelBinarizer()
-    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name']).astype(float)
+    genre_vectors = genre_encoder.fit_transform(movies_df_grouped['genre_name'])
+
+    # Asegurarse de que los vectores son del tipo float
+    genre_vectors = genre_vectors.astype(float)
     
     # Ponderar más los géneros
     genre_vectors = genre_vectors * genre_weight
