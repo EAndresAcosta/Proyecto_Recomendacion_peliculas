@@ -183,7 +183,7 @@ def get_actor(nombre_actor: str = Query(default= 'Tom Hanks')):
             El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
     """
     # Filtrar el DataFrame por el nombre del actor en la columna 'name'
-    peliculas_actor = movies[movies['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
+    peliculas_actor = casting[casting['name'].apply(lambda x: nombre_actor.lower() in x.lower())]
     
     if peliculas_actor.empty:
         return f"No se encontró ninguna película con el actor '{nombre_actor}'."
