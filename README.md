@@ -10,7 +10,7 @@ El proyecto consiste en crear una API que permita a los usuarios obtener recomen
 
 ---
 <p align="center">
-<img src="/image/API.jpg" alt="API" width="800" height="500"/>
+<img src="/image/API.jpg" alt="API" width="600" height="350"/>
 </p>
 
 
