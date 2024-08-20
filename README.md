@@ -1,13 +1,17 @@
 <h1 align= 'center'> SISTEMA DE RECOMENDACION PARA PELICULAS </h1>
 
-![sistema_recomendacion](https://www.techopedia.com/es/wp-content/uploads/sites/4/2024/02/understandable_ai-1-scaled.jpeg)
+<p align="center">
+<img src="/image/sistema_recomendacion.jpeg" alt="Sistema_recomendacion" width="800" height="500"/>
+</p>
 
 ### Introducción:
 ---
 El proyecto consiste en crear una API que permita a los usuarios obtener recomendaciones personalizadas de peliculas. La API utiliza un sistema de recomendacion basado en machine learning para proporcionar recomendaciones basadas en los gustos y preferencias de los usuarios. En la interfaz podran consultar datos de peliculas, fechas, participacion de actores, participacion de directores, entre otras.
 
 ---
-<img src="https://www.bernanetwork.com/img/20221024_635708381cc8e.jpg" alt="API" width="600" height="800"/>
+<p align="center">
+<img src="/image/API.jpg" alt="API" width="800" height="500"/>
+</p>
 
 
 ### Contenido:
