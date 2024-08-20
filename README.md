@@ -1,12 +1,14 @@
 <h1 align= 'center'> SISTEMA DE RECOMENDACION PARA PELICULAS </h1>
----
+
 ![sistema_recomendacion](https://www.techopedia.com/es/wp-content/uploads/sites/4/2024/02/understandable_ai-1-scaled.jpeg)
 
 ### Introducción:
 ---
 El proyecto consiste en crear una API que permita a los usuarios obtener recomendaciones personalizadas de peliculas. La API utiliza un sistema de recomendacion basado en machine learning para proporcionar recomendaciones basadas en los gustos y preferencias de los usuarios. En la interfaz podran consultar datos de peliculas, fechas, participacion de actores, participacion de directores, entre otras.
+
 ---
-![API](https://www.bernanetwork.com/img/20221024_635708381cc8e.jpg)
+<img src="https://www.bernanetwork.com/img/20221024_635708381cc8e.jpg" alt="API" width="600" height="800"/>
+
 
 ### Contenido:
 ---
@@ -20,8 +22,30 @@ El proyecto consiste en crear una API que permita a los usuarios obtener recomen
 
 <h2 align= 'center'> Descripción del problema </h2>
 ---
-Empezaste a trabajar como Data Scientist en una start-up que provee servicios de agregación de plataformas de streaming. El mundo es bello y vas a crear tu primer modelo de ML que soluciona un problema de negocio: un sistema de recomendación que aún no ha sido puesto en marcha!
+Te acabas de unir a una start-up que agrega plataformas de streaming y tu primer desafío es construir un sistema de recomendación desde cero. Sin embargo, al revisar los datos, te das cuenta de que están en un estado caótico: anidados, sin procesar, y sin ningún tipo de automatización para actualizaciones. En lugar de trabajar directamente en el modelo de machine learning, primero debes asumir el rol de Data Engineer para limpiar y estructurar los datos.
 
-Vas a sus datos y te das cuenta que la madurez de los mismos es poca (ok, es nula 😭): Datos anidados, sin transformar, no hay procesos automatizados para la actualización de nuevas películas o series, entre otras cosas…. haciendo tu trabajo imposible 😩.
+El tiempo es limitado y necesitas entregar un MVP en pocas semanas. Aunque la tarea parece abrumadora, tienes claro el camino a seguir. Sabes que superar este obstáculo es crucial para que el sistema de recomendación cobre vida y se convierta en una pieza clave del negocio.
 
-Debes empezar desde 0, haciendo un trabajo rápido de Data Engineer y tener un MVP (Minimum Viable Product) para las próximas semanas! Tu cabeza va a explotar 🤯, pero al menos sabes cual es, conceptualmente, el camino que debes de seguir ❗. Así que te espantas los miedos y te pones manos a la obra 💪
+<h2 align= 'center'> Datasets </h2>
+---
+En el apartado de Datasets se listan todos los archivos de datos utilizados en el proyecto. Aquí encontrarás nombre y formato. Esta sección sirve como referencia para los datos disponibles que sustentan el desarrollo del sistema de recomendación.
+
+<h2 align= 'center'> ETL </h2>
+
+En el apartado de ETL se describe el proceso de Extracción, Transformación y Carga (ETL) aplicado a los datos del proyecto. Aquí se detallan las técnicas y herramientas utilizadas para extraer los datos de las fuentes originales, transformarlos en un formato adecuado para el análisis, y cargarlos en el sistema para su uso en el modelo de recomendación. Esta sección proporciona una visión general de cómo se gestionaron los datos a lo largo de su ciclo de vida, asegurando su calidad y adecuación para el análisis.
+
+<h2 align= 'center'> EDA </h2>
+
+En el apartado de EDA se exploran los datos a través de un Análisis Exploratorio de Datos (EDA). Aquí se presentan los hallazgos clave obtenidos durante la exploración inicial, incluyendo estadísticas descriptivas, distribuciones de variables, y cualquier patrón o anomalía detectada. Esta sección ayuda a entender la estructura y características de los datos antes de aplicar técnicas de modelado.
+
+<h2 align= 'center'> Endpoints </h2>
+
+En el apartado de Endpoints se detallan las interfaces de programación (API endpoints) disponibles para interactuar con el sistema. Aquí se incluye una descripción de cada endpoint, los parámetros necesarios, y ejemplos de solicitudes y respuestas. Esta sección es esencial para los desarrolladores que necesiten integrar o consultar el sistema de recomendación desde aplicaciones externas.
+
+<h2 align= 'center'> Links </h2>
+
+[URL del modelo de recomendación](https://proyecto-recomendacion-peliculas.onrender.com)
+
+<h2 align= 'center'> Recursos </h2>
+
+En el apartado de Recursos se listan todos los materiales y referencias que respaldan el proyecto.
