@@ -56,6 +56,8 @@ En el apartado de Endpoints se detallan las interfaces de programación (API end
 
 [URL del modelo de recomendación](https://proyecto-recomendacion-peliculas.onrender.com/docs)
 
+[Video explicativo del proyecto](https://drive.google.com/file/d/1HmqHJbbQn0vvVUBt5Za3ZZgU2BbHOm5g/view?usp=sharing)
+
 ## Recursos
 ---
 
