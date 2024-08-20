@@ -10,7 +10,7 @@ El proyecto consiste en crear una API que permita a los usuarios obtener recomen
 
 ---
 <p align="center">
-<img src="/image/API2.jpg" alt="API" width="800" height="400"/>
+<img src="/image/API2.jpg" alt="API" width="800" height="350"/>
 </p>
 
 
@@ -62,4 +62,7 @@ En el apartado de Endpoints se detallan las interfaces de programación (API end
 En el apartado de Recursos se listan todos los materiales y referencias que respaldan el proyecto.
 
 [Datasets originales](https://drive.google.com/drive/folders/15QflnV1gcbI1iVRtJzm5AiI3cg5Rnu8q?usp=sharing)
+
 [Diccionario de los datasets](https://docs.google.com/spreadsheets/d/1k7G3uLoSf2M4ZTqusWFMwY0Pmiz8Sb-V_Y7SMI3vOV8/edit?usp=sharing)
+
+[Readme.md](https://drive.google.com/file/d/1sjmW1aYIhDFia1Rx2SlBvqjn9GFluRtM/view?usp=sharing)
