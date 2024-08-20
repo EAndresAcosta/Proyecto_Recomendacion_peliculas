@@ -1,7 +1,7 @@
 <h1 align= 'center'> SISTEMA DE RECOMENDACION PARA PELICULAS </h1>
 
 <p align="center">
-<img src="/image/sistema_recomendacion.jpeg" alt="Sistema_recomendacion" width="800" height="500"/>
+<img src="/image/sistema_recomendacion.jpeg" alt="Sistema_recomendacion" width="800" height="450"/>
 </p>
 
 ### Introducción:
@@ -16,13 +16,13 @@ El proyecto consiste en crear una API que permita a los usuarios obtener recomen
 
 ### Contenido:
 ---
-1. [Descripción del problema](#descripcion-del-problema)
-2. [Datasets](#datasets)
-3. [ETL](#etl)
-4. [EDA](#eda)
-5. [Endpoints](#endpoints)
-6. [Links](#links)
-7. [Recursos](#recursos)
+1. [Descripción del problema](#Descripción-del-problema)
+2. [Datasets](#Datasets)
+3. [ETL](#ETL)
+4. [EDA](#EDA)
+5. [Endpoints](#Endpoints)
+6. [Links](#Links)
+7. [Recursos](#Recursos)
 
 <h2 align= 'center'> Descripción del problema </h2>
 ---
@@ -48,8 +48,10 @@ En el apartado de Endpoints se detallan las interfaces de programación (API end
 
 <h2 align= 'center'> Links </h2>
 
-[URL del modelo de recomendación](https://proyecto-recomendacion-peliculas.onrender.com)
+[URL del modelo de recomendación](https://proyecto-recomendacion-peliculas.onrender.com/docs)
 
 <h2 align= 'center'> Recursos </h2>
 
 En el apartado de Recursos se listan todos los materiales y referencias que respaldan el proyecto.
+
+[Datasets originales](https://drive.google.com/drive/folders/15QflnV1gcbI1iVRtJzm5AiI3cg5Rnu8q?usp=sharing)

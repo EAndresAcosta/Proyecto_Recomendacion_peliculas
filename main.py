@@ -127,7 +127,7 @@ def score_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
 #----------------------------------------------------------------------------------------------------------
 
-@app.get("/ratings, average", tags=["Votos, Promedio"])
+@app.get("/ratings, average", tags=["Cantidad de votos y promedio"])
 
 def votos_titulo(titulo_de_la_filmacion: str = Query(default= 'Toy Story')):
 
@@ -276,7 +276,7 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
 
 @app.get("/recommendation system", tags=["Sistema de recomendacion"])
 
-def recomendacion(titulo: str = Query(default= 'Toy Story'), randomize=True):
+def recomendacion(titulo: str = Query(default= 'Toy Story')):
     
     """
     <strong>Esta funcion devuelve las peliculas recomendadas a traves del titulo de la pelicula<strong>
@@ -289,6 +289,8 @@ def recomendacion(titulo: str = Query(default= 'Toy Story'), randomize=True):
 
             Las películas recomendadas.
     """
+    randomize=True
+
     try:
         # Cargar datos
         movies_df = pd.read_parquet('/Datasets/movies_df.parquet')
