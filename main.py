@@ -9,7 +9,7 @@ from scipy.sparse import hstack
 
 
 # Datos
-movies = pd.read_parquet('/Datasets/movies_compressed.parquet')
+movies = pd.read_parquet('Datasets/movies_compressed.parquet')
 
 # Asegurarse de que release_date esté en formato de fecha
 movies['release_date'] = pd.to_datetime(movies['release_date'], errors='coerce')
@@ -179,7 +179,7 @@ def get_actor(nombre_actor: str = Query(default= 'Tom Hanks')):
             El éxito del actor medido a través del retorno, el promedio de retorno y las películas en las que ha participado.
     """
     # Datos
-    casting = pd.read_parquet('/Datasets/endpoint_casting.parquet')
+    casting = pd.read_parquet('Datasets/endpoint_casting.parquet')
 
     # Asegurarse de que release_date esté en formato de fecha
     casting['release_date'] = pd.to_datetime(casting['release_date'], errors='coerce')
@@ -223,7 +223,7 @@ def get_director(nombre_director: str = Query(default= 'Christopher Nolan')):
             El retorno total del director y las películas que ha dirigido.
     """
     # Datos
-    crew = pd.read_parquet('/Datasets/endpoint_crew.parquet')
+    crew = pd.read_parquet('Datasets/endpoint_crew.parquet')
     
     # Asegurarse de que release_date esté en formato de fecha
     crew['release_date'] = pd.to_datetime(crew['release_date'], errors='coerce')
@@ -293,7 +293,7 @@ def recomendacion(titulo: str = Query(default= 'Toy Story')):
 
     try:
         # Cargar datos
-        movies_df = pd.read_parquet('/Datasets/movies_df.parquet')
+        movies_df = pd.read_parquet('Datasets/movies_df.parquet')
 
         # Agrupar los géneros por título
         movies_df_grouped = movies_df.groupby('title').agg({
