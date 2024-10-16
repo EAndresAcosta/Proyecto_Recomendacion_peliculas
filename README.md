@@ -1,7 +1,7 @@
 <h1 align= 'center'> SISTEMA DE RECOMENDACION PARA PELICULAS </h1>
 
 <p align="center">
-<img src="/image/sistema_recomendacion.jpeg" alt="Sistema_recomendacion" width="800" height="480"/>
+<img src="./image/sistema_recomendacion.jpeg" alt="Sistema_recomendacion" width="700" height="420"/>
 </p>
 
 ## Introducción:
@@ -10,7 +10,7 @@ El proyecto consiste en crear una API que permita a los usuarios obtener recomen
 
 ---
 <p align="center">
-<img src="/image/API2.jpg" alt="API" width="800" height="350"/>
+<img src="./image/API2.jpg" alt="API" width="700" height="360"/>
 </p>
 
 
@@ -51,6 +51,38 @@ En el apartado de EDA se exploran los datos a través de un Análisis Explorator
 
 En el apartado de Endpoints se detallan las interfaces de programación (API endpoints) disponibles para interactuar con el sistema. Aquí se incluye una descripción de cada endpoint, los parámetros necesarios, y ejemplos de solicitudes y respuestas. Esta sección es esencial para los desarrolladores que necesiten integrar o consultar el sistema de recomendación desde aplicaciones externas.
 
+## Instalación
+
+Librerías necesarias: 
+
+fastapi == 0.112.0
+
+uvicorn == 0.30.5
+
+pandas == 2.2.2
+
+scikit-learn == 1.5.1
+
+nltk == 3.8.1
+
+pyarrow == 17.0.0
+
+fastparquet == 2024.5.0
+
+seaborn == 0.13.2
+
+matplotlib == 3.9.2
+
+wordcloud == 1.9.3
+
+Clonar el repositorio: git clone https://github.com/usuario/Proyecto_Recomendacion_peliculas.git
+
+Crear un entorno virtual: ``virtualenv venv``
+
+Activar el entorno virtual: Windows: ``.\venv\Scripts\activate`` macOS/Linux: ``source venv/bin/activate``
+
+Instalar las dependencias: ``pip install -r requirements.txt``
+
 ## Links
 ---
 
@@ -68,3 +100,6 @@ En el apartado de Recursos se listan todos los materiales y referencias que resp
 [Diccionario de los datasets](https://docs.google.com/spreadsheets/d/1k7G3uLoSf2M4ZTqusWFMwY0Pmiz8Sb-V_Y7SMI3vOV8/edit?usp=sharing)
 
 [Readme.md](https://drive.google.com/file/d/1sjmW1aYIhDFia1Rx2SlBvqjn9GFluRtM/view?usp=sharing)
+
+## Autores
+| [<img src="https://avatars.githubusercontent.com/u/143465990?s=64&v=4" width=100><br><sub>Andres Acosta</sub>](https://github.com/EAndresAcosta)
