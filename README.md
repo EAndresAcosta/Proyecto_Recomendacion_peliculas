@@ -85,10 +85,13 @@ Instalar las dependencias: ``pip install -r requirements.txt``
 
 ## Links
 ---
+**Modelo de recomendación**
 
-[URL del modelo de recomendación](https://proyecto-recomendacion-peliculas.onrender.com/docs)
+[![My Skills](https://go-skill-icons.vercel.app/api/icons?i=fastapi)](https://proyecto-recomendacion-peliculas.onrender.com/docs)
 
-[Video explicativo del proyecto](https://drive.google.com/file/d/1HmqHJbbQn0vvVUBt5Za3ZZgU2BbHOm5g/view?usp=sharing)
+**Video explicativo del proyecto**
+
+[![Video explicativo del proyecto](https://go-skill-icons.vercel.app/api/icons?i=chrome&theme=light)](https://drive.google.com/file/d/1HmqHJbbQn0vvVUBt5Za3ZZgU2BbHOm5g/view?usp=sharing)
 
 ## Recursos
 ---
