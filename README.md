@@ -51,6 +51,10 @@ En el apartado de EDA se exploran los datos a través de un Análisis Explorator
 
 En el apartado de Endpoints se detallan las interfaces de programación (API endpoints) disponibles para interactuar con el sistema. Aquí se incluye una descripción de cada endpoint, los parámetros necesarios, y ejemplos de solicitudes y respuestas. Esta sección es esencial para los desarrolladores que necesiten integrar o consultar el sistema de recomendación desde aplicaciones externas.
 
+## Tecnologías utilizadas
+
+![My Skills](https://go-skill-icons.vercel.app/api/icons?i=python,pandas,matplotlib,seaborn,fastapi,scikitlearn,render,numpy,jupyter&theme=dark&perline=5)
+
 ## Instalación
 
 Librerías necesarias: 
