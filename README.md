@@ -105,4 +105,4 @@ En el apartado de Recursos se listan todos los materiales y referencias que resp
 [Readme.md](https://drive.google.com/file/d/1sjmW1aYIhDFia1Rx2SlBvqjn9GFluRtM/view?usp=sharing)
 
 ## Autores
-| [<img src="https://avatars.githubusercontent.com/u/143465990?s=64&v=4" width=100><br><sub>Andres Acosta</sub>](https://github.com/EAndresAcosta)
+[<img src="https://avatars.githubusercontent.com/u/143465990?s=64&v=4" width=100><br><sub>Andres Acosta</sub>](https://github.com/EAndresAcosta)
